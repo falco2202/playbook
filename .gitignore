@@ -1,0 +1,64 @@
+# Build and dependencies
+bin/
+obj/
+out/
+*.exe
+*.dll
+*.pdb
+*.log
+*.vsix
+*.nupkg
+*.snupkg
+
+# User-specific files
+.vscode/
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+*.vs/
+
+# Rider / JetBrains Rider
+.idea/
+*.sln.iml
+
+# OS-specific
+.DS_Store
+Thumbs.db
+
+# Logs and database
+logs/
+*.log
+*.db
+*.sqlite
+*.sqlite-journal
+dump.rdb
+
+# Environment variables & secrets
+.env
+appsettings.Development.json
+appsettings.Local.json
+secrets.json
+
+# Node.js (for frontends)
+node_modules/
+package-lock.json
+yarn.lock
+
+# Docker
+**/docker-compose.override.yml
+**/docker-compose.*.override.yml
+.dockerignore
+
+# Kubernetes and Terraform
+.kube/
+terraform.tfstate
+terraform.tfstate.backup
+.terraform/
+
+# Clean Architecture / DDD specific
+**/Migrations/
+**/Database/
+**/EFCoreMigrationsHistory/
+**/GeneratedCode/
+**/__**

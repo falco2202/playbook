@@ -1,14 +1,9 @@
 using Application;
-using Domain.Entities;
 using Infrastructure;
 using Infrastructure.Identity;
-using Infrastructure.Persistence;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Microsoft.OpenApi.Models;
 using System.Text.Json;
-using System.Threading.Tasks;
 
 namespace Presentation;
 

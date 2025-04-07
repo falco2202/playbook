@@ -76,6 +76,12 @@ namespace Presentation.Controllers
             // Return new access token in response body
             return Ok(new { result.AccessToken });
         }
+
+        [HttpPost]
+        public async Task<IActionResult> Register()
+        {
+            throw new NotImplementedException();
+        }
     }
 
 }

@@ -4,7 +4,7 @@ namespace Domain.Entities
 {
     public class ApplicationUser : IdentityUser
     {
-        public int TokenVersion { get; private set; } = 0;  // Ensures Refresh Token invalidation
+        public int TokenVersion { get; private set; } = 0;
         public void IncrementTokenVersion()
         {
             TokenVersion++;

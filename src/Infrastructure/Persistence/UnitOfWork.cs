@@ -1,7 +1,10 @@
 ﻿using Application.Common.Interfaces;
-using Domain.Entities;
-using Microsoft.AspNetCore.Identity;
-using Application.Common.Models;
+using Application.Common.Models; 
+using Microsoft.EntityFrameworkCore.ChangeTracking; 
+using System.Linq; 
+using System.Threading; 
+using System.Threading.Tasks;
+
 
 namespace Infrastructure.Persistence
 {
@@ -10,34 +13,38 @@ namespace Infrastructure.Persistence
         private readonly PlayBookDbContext _context;
         private readonly IDomainEventDispatcher _eventDispatcher;
 
-
-        private readonly UserManager<ApplicationUser> _userManager;
-            
         public UnitOfWork(
             PlayBookDbContext context, 
-            IDomainEventDispatcher eventDispatcher, 
-            UserManager<ApplicationUser> userManager)
+            IDomainEventDispatcher eventDispatcher)
         {
             _context = context;
             _eventDispatcher = eventDispatcher;
-            _userManager = userManager;
         }
 
         public async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
         {
-            // Extract domain events from tracked aggregates
-            var domainEvents = _context.ChangeTracker
+            var aggregateRoots = _context.ChangeTracker
                 .Entries<AggregateRoot>()
-                .SelectMany(e => e.Entity.DomainEvents)
+                .Select(e => e.Entity)
+                .Where(e => e.DomainEvents.Any())
                 .ToList();
 
-            // Save changes to database first
+            // Extract domain events from tracked aggregates
+            var domainEvents = aggregateRoots
+                .SelectMany(ar => ar.DomainEvents)
+                .ToList();
+
             int result = await _context.SaveChangesAsync(cancellationToken);
 
-            // Dispatch domain events after successful save
             await _eventDispatcher.DispatchEventsAsync(domainEvents);
 
+            foreach (var aggregateRoot in aggregateRoots)
+            {
+                aggregateRoot.ClearDomainEvents();
+            }
+
             return result;
+
         }
 
         public void Dispose()

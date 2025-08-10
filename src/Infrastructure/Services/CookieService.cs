@@ -20,9 +20,11 @@ namespace Infrastructure.Services
             response.Cookies.Append(RefreshTokenKey, refreshToken, cookieOptions);
         }
 
-        public string GetRefreshTokenFromRequest(HttpRequest request)
+        public string? GetRefreshTokenFromRequest(HttpRequest request)
         {
-            return request.Cookies[RefreshTokenKey];
+            return request.Cookies.TryGetValue(RefreshTokenKey, out var token)
+                ? token
+                : null;
         }
 
         public void RemoveRefreshTokenCookie(HttpResponse response)
